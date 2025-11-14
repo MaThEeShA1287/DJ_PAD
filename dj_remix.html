@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hiru Beats — DJ Remix</title>
+  <link rel="icon" type="image/x-icon" href="Gemini_Generated_Image_pzd711pzd711pzd7.png">
+  <style>
+        body {
+           
+            cursor: url('https://cur.cursors-4u.net/cursors/cur-2/cur103.cur'), auto; 
+        }
+    </style>
+  <style>
+    :root{--bg:#070712;--card:#0f1720;--accent:#ff4d6d;--accent2:#00b3ff;--muted:#94a3b8}
+    *{box-sizing:border-box;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    html,body{height:100%;margin:0;background:radial-gradient(1000px 500px at 10% 10%, rgba(255,77,109,0.05), transparent), radial-gradient(900px 450px at 90% 90%, rgba(0,179,255,0.02), transparent), linear-gradient(180deg,#04050a,#07101a); color:#e6eef8}
+    header{display:flex;align-items:center;gap:14px;padding:12px 18px}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo .mark{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-weight:800;box-shadow:0 8px 26px rgba(0,0,0,0.6)}
+    h1{font-size:18px;margin:0}
+
+    .controls-head{margin-left:auto;display:flex;gap:8px;align-items:center}
+    .rec-dot{width:10px;height:10px;border-radius:50%;background:#a3a3a3}
+
+    .wave-wrap{padding:12px 18px}
+    #waveCanvas{width:100%;height:120px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent);display:block}
+
+    main{display:grid;grid-template-columns:1fr 380px;gap:18px;padding:18px}
+    .console{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:14px;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+    .deck{border-radius:12px;padding:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);position:relative;overflow:hidden}
+    .plate{height:170px;border-radius:12px;background:linear-gradient(90deg,#0b0b10 0%, #111318 100%);display:flex;align-items:center;justify-content:center;position:relative}
+    .album{width:130px;height:130px;border-radius:50%;background:conic-gradient(#1b1f24,#0b0b10);box-shadow:inset 0 10px 28px rgba(0,0,0,0.7), 0 6px 18px rgba(0,0,0,0.6);display:grid;place-items:center;font-weight:800;color:#fff}
+    .album img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+    .plate.spin .album{animation:spin 6.8s linear infinite}
+    @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+    .meta .left{max-width:66%}
+    .meta .title{font-weight:700}
+    .meta .sub{color:var(--muted);font-size:13px}
+
+    .controls{display:flex;gap:8px;align-items:center;margin-top:10px}
+    .btn{background:rgba(7, 205, 255, 0.705);padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    .btn:active{transform:translateY(1px)}
+    .big{padding:12px 16px;font-weight:700}
+
+    .fx{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+    .fx .fx-card{background:rgba(255,255,255,0.02);padding:8px;border-radius:10px}
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input[type=range]{width:100%}
+    .small{font-size:13px}
+
+    .master{grid-column:1/-1;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:12px;border-radius:12px;display:flex;gap:12px;align-items:flex-start}
+    .timeline{height:14px;background:rgba(255,255,255,0.03);border-radius:10px;margin:10px 0;position:relative;overflow:hidden}
+    .progress{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;border-radius:10px}
+    .time{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+
+    .meter{height:84px;background:rgba(255,255,255,0.02);border-radius:8px;padding:8px;margin-top:8px;display:flex;align-items:end;gap:6px}
+    .meter .bar{flex:1;border-radius:3px;background:linear-gradient(180deg,#0f8 0%, #0a6 100%);height:6px;transition:height 0.05s}
+
+    .right-panel{padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border-radius:12px;height:calc(100vh - 160px);overflow:auto}
+    .panel-section{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;margin-top:12px}
+
+    .playlist{margin-top:12px;background:rgba(255,255,255,0.02);padding:10px;border-radius:10px;max-height:180px;overflow:auto}
+    .row{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px}
+    .row:hover{background:rgba(255,255,255,0.01)}
+
+    @media (max-width:1100px){main{grid-template-columns:1fr} .right-panel{height:auto}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <div class="mark">HB</div>
+      <div>
+        <h1>Hiru Beats — DJ Remix (Recorder)</h1>
+        <div style="color:var(--muted);font-size:13px">Record your live mix and download it. Works in modern browsers (Chrome/Edge/Firefox).</div>
+      </div>
+    </div>
+
+    <div class="controls-head">
+      <div id="recStatus" style="display:flex;align-items:center;gap:8px">
+        <div class="rec-dot" id="recDot"></div>
+        <div style="font-size:13px;color:var(--muted);" id="recLabel">Not recording</div>
+      </div>
+      <button class="btn" id="startRec">Start Recording</button>
+      <button class="btn" id="stopRec" disabled>Stop</button>
+      <button class="btn" id="downloadRec" disabled>Download</button>
+    </div>
+  </header>
+
+  <!-- Waveform Canvas -->
+  <div class="wave-wrap">
+    <canvas id="waveCanvas"></canvas>
+    <div style="display:flex;justify-content:flex-end;margin-top:6px;gap:8px">
+      <button class="btn" id="toggleWave">Toggle Wave</button>
+      <label style="color:var(--muted);font-size:13px">Mode:</label>
+      <select id="waveMode" class="btn" style="padding:6px">
+        <option value="master">Master</option>
+        <option value="deckA">Deck A</option>
+        <option value="deckB">Deck B</option>
+      </select>
+    </div>
+  </div>
+
+  <main>
+    <section class="console">
+      <!-- Deck A -->
+      <div class="deck" id="deckA">
+        <div class="plate" id="plateA">
+          <div class="album" id="albumA">A</div>
+        </div>
+
+        <div class="meta">
+          <div class="left">
+            <div class="title" id="titleA">No track loaded</div>
+            <div class="sub" id="artistA">—</div>
+          </div>
+          <div style="text-align:right">
+            <div class="small">Pitch</div>
+            <input id="pitchA" type="range" min="0.5" max="2" step="0.005" value="1">
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn" id="cueA">CUE</button>
+          <button class="btn" id="prevA">⏮</button>
+          <button class="btn big" id="playA">▶️</button>
+          <button class="btn" id="nextA">⏭</button>
+          <input id="fileA" type="file" accept="audio/*" class="btn" style="padding:6px">
+        </div>
+
+        <div class="fx">
+          <div class="fx-card">
+            <label>Gate (Tremolo)</label>
+            <input id="gateA" type="range" min="0" max="1" step="0.01" value="0">
+          </div>
+          <div class="fx-card">
+            <label>Echo (ms)</label>
+            <input id="echoA" type="range" min="0" max="1200" step="1" value="0">
+          </div>
+          <div class="fx-card">
+            <label>Filter (Hz)</label>
+            <input id="filterA" type="range" min="200" max="16000" step="1" value="16000">
+          </div>
+          <div class="fx-card">
+            <label>Reverb (wet)</label>
+            <input id="reverbA" type="range" min="0" max="1" step="0.01" value="0">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Deck B -->
+      <div class="deck" id="deckB">
+        <div class="plate" id="plateB">
+          <div class="album" id="albumB">B</div>
+        </div>
+
+        <div class="meta">
+          <div class="left">
+            <div class="title" id="titleB">No track loaded</div>
+            <div class="sub" id="artistB">—</div>
+          </div>
+          <div style="text-align:right">
+            <div class="small">Pitch</div>
+            <input id="pitchB" type="range" min="0.5" max="2" step="0.005" value="1">
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn" id="cueB">CUE</button>
+          <button class="btn" id="prevB">⏮</button>
+          <button class="btn big" id="playB">▶️</button>
+          <button class="btn" id="nextB">⏭</button>
+          <input id="fileB" type="file" accept="audio/*" class="btn" style="padding:6px">
+        </div>
+
+        <div class="fx">
+          <div class="fx-card">
+            <label>Flanger</label>
+            <input id="flangerB" type="range" min="0" max="1" step="0.01" value="0">
+          </div>
+          <div class="fx-card">
+            <label>Roll (ms)</label>
+            <input id="rollB" type="range" min="0" max="1000" step="10" value="0">
+          </div>
+          <div class="fx-card">
+            <label>Phaser</label>
+            <input id="phaserB" type="range" min="0" max="1" step="0.01" value="0">
+          </div>
+          <div class="fx-card">
+            <label>Reverb (wet)</label>
+            <input id="reverbB" type="range" min="0" max="1" step="0.01" value="0">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Master / Mixer -->
+      <div class="master">
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:700">Master Transport</div>
+            <div style="color:var(--muted);font-size:13px">Crossfade & Sync</div>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+            <button class="btn" id="masterPlay">▶ Master</button>
+            <button class="btn" id="beatSync">BPM Sync</button>
+            <div style="flex:1">
+              <input id="crossfader" type="range" min="0" max="1" step="0.01" value="0.5" style="width:100%">
+            </div>
+            <div style="min-width:120px;text-align:right;color:var(--muted)"><span id="globalTime">00:00</span> / <span id="globalDuration">00:00</span></div>
+          </div>
+
+          <div class="timeline"><div class="progress" id="masterProgress"></div></div>
+
+          <div style="display:flex;gap:12px;margin-top:8px;align-items:center">
+            <div style="flex:1">
+              <label>Master Volume</label>
+              <input id="masterVol" type="range" min="0" max="1" step="0.01" value="0.9" style="width:100%">
+            </div>
+            <div style="width:220px">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="font-weight:700">Master Meter</div>
+                <div style="color:var(--muted);font-size:13px">Live</div>
+              </div>
+              <div class="meter" id="meter"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <aside class="right-panel">
+      <div style="font-weight:800">Global FX & Tools</div>
+
+      <div class="panel-section">
+        <label>Global Filter</label>
+        <input id="globalFilter" type="range" min="200" max="16000" step="1" value="16000">
+
+        <label style="margin-top:8px;display:block">Global Reverb</label>
+        <input id="globalReverb" type="range" min="0" max="1" step="0.01" value="0">
+
+        <label style="margin-top:8px;display:block">Beat Grid (BPM)</label>
+        <input id="bpm" type="number" min="60" max="200" value="120" style="width:120px">
+      </div>
+
+      <div class="panel-section">
+        <label>TEKA CV (stutter length ms)</label>
+        <input id="tekaCV" type="range" min="0" max="2000" value="0">
+        <label style="margin-top:8px;display:block">TEKA DIV (division)</label>
+        <input id="tekaDIV" type="range" min="1" max="16" value="4">
+        <div style="margin-top:8px;color:var(--muted)">Press the TEKA button (below) to trigger a stutter.</div>
+        <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="triggerTeka">Trigger TEKA</button><button class="btn" id="flipDB">DB Flip (reverse)</button></div>
+      </div>
+
+      <div class="panel-section">
+        <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700">TEKA / Roll Controls</div><div style="color:var(--muted)">Live</div></div>
+        <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="rollA">Roll A</button><button class="btn" id="rollB">Roll B</button><button class="btn" id="bliss">Bliss</button></div>
+        <div style="margin-top:8px;color:var(--muted);font-size:13px">Roll creates a short repeating loop — Bliss applies a warm chorus+reverb preset.</div>
+      </div>
+
+      <div class="panel-section playlist">
+        <div style="font-weight:700;margin-bottom:6px">Playlist / Drag & Drop</div>
+        <div class="row">Drop audio files onto the page to add to decks</div>
+      </div>
+
+      <div style="margin-top:12px;color:var(--muted);font-size:13px">Tip: load tracks into each deck, set BPM for beat grid, use TEKA or Roll to create stutters, and crossfade between decks for DJ-style mixes.</div>
+    </aside>
+  </main>
+
+  <footer style="padding:12px 18px;color:var(--muted)">Upgraded single-file DJ remix app with waveform & recorder — Hiru Beats</footer>
+
+  <script>
+    // --- Web Audio setup ---
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioContext();
+
+    function Deck(id){
+      this.id = id; this.buffer = null; this.source = null; this.playing = false; this.startAt = 0; this.pausedAt = 0; this.pitch = 1;
+      this.gain = ctx.createGain(); this.filter = ctx.createBiquadFilter(); this.delay = ctx.createDelay(5.0); this.delayGain = ctx.createGain(); this.reverb = ctx.createConvolver(); this.reverbGain = ctx.createGain(); this.tremolo = ctx.createGain(); this.analyser = ctx.createAnalyser();
+      this.flangerDelay = ctx.createDelay(); this.flangerLFO = ctx.createOscillator(); this.flangerGain = ctx.createGain();
+      this.phaserFilters = [ctx.createBiquadFilter(), ctx.createBiquadFilter(), ctx.createBiquadFilter(), ctx.createBiquadFilter()];
+      this.filter.type = 'lowpass'; this.filter.frequency.value = 16000; this.tremolo.gain.value = 1; this.delay.delayTime.value = 0; this.delayGain.gain.value = 0; this.reverbGain.gain.value = 0;
+      this.flangerDelay.delayTime.value = 0.005; this.flangerLFO.type='sine'; this.flangerLFO.frequency.value=0.25; this.flangerGain.gain.value=0.003; this.flangerLFO.connect(this.flangerGain); this.flangerGain.connect(this.flangerDelay.delayTime); this.flangerLFO.start();
+      for(let i=0;i<this.phaserFilters.length;i++){ this.phaserFilters[i].type='allpass'; this.phaserFilters[i].frequency.value = 1000*(i+1); }
+      this.outNode = ctx.createGain(); this.outNode.gain.value = 0.5; // connect to masterFilter later
+    }
+
+    Deck.prototype.connectAnalyser = function(node){ this.analyser.fftSize = 2048; this.outNode.connect(this.analyser); }
+
+    const masterFilter = ctx.createBiquadFilter(); masterFilter.type='lowpass'; masterFilter.frequency.value=16000;
+    const masterGain = ctx.createGain(); masterGain.gain.value = 0.9;
+    const masterAnalyser = ctx.createAnalyser(); masterAnalyser.fftSize = 2048;
+
+    masterFilter.connect(masterGain); masterGain.connect(masterAnalyser); masterGain.connect(ctx.destination);
+
+    // MediaStream destination for recording the master mix
+    const mediaDest = ctx.createMediaStreamDestination();
+    masterGain.connect(mediaDest); // duplicate master signal to recording stream
+
+    const A = new Deck('A'); const B = new Deck('B');
+    A.outNode.connect(masterFilter); B.outNode.connect(masterFilter);
+    A.connectAnalyser(); B.connectAnalyser();
+
+    // UI refs
+    const ui = {
+      fileA: document.getElementById('fileA'), fileB: document.getElementById('fileB'),
+      playA: document.getElementById('playA'), playB: document.getElementById('playB'),
+      pitchA: document.getElementById('pitchA'), pitchB: document.getElementById('pitchB'),
+      albumA: document.getElementById('albumA'), albumB: document.getElementById('albumB'),
+      titleA: document.getElementById('titleA'), titleB: document.getElementById('titleB'),
+      artistA: document.getElementById('artistA'), artistB: document.getElementById('artistB'),
+      gateA: document.getElementById('gateA'), echoA: document.getElementById('echoA'), filterA: document.getElementById('filterA'), reverbA: document.getElementById('reverbA'),
+      flangerB: document.getElementById('flangerB'), rollB: document.getElementById('rollB'), phaserB: document.getElementById('phaserB'), reverbB: document.getElementById('reverbB'),
+      masterVol: document.getElementById('masterVol'), meter: document.getElementById('meter'), masterProgress: document.getElementById('masterProgress'),
+      masterPlay: document.getElementById('masterPlay'), crossfader: document.getElementById('crossfader'), globalFilter: document.getElementById('globalFilter'), globalReverb: document.getElementById('globalReverb'), bpm: document.getElementById('bpm'),
+      tekaCV: document.getElementById('tekaCV'), tekaDIV: document.getElementById('tekaDIV'), triggerTeka: document.getElementById('triggerTeka'), flipDB: document.getElementById('flipDB'), rollA: document.getElementById('rollA'), rollBbtn: document.getElementById('rollB'), bliss: document.getElementById('bliss'), beatSyncBtn: document.getElementById('beatSync'),
+      waveCanvas: document.getElementById('waveCanvas'), toggleWave: document.getElementById('toggleWave'), waveMode: document.getElementById('waveMode'),
+      startRec: document.getElementById('startRec'), stopRec: document.getElementById('stopRec'), downloadRec: document.getElementById('downloadRec'), recDot: document.getElementById('recDot'), recLabel: document.getElementById('recLabel')
+    };
+
+    // resize canvas
+    function resizeCanvas(){ const c = ui.waveCanvas; const rect = c.getBoundingClientRect(); c.width = rect.width * window.devicePixelRatio; c.height = rect.height * window.devicePixelRatio; c.style.height = rect.height + 'px'; }
+    window.addEventListener('resize', resizeCanvas); setTimeout(resizeCanvas,100);
+
+    // helpers for loading
+    async function decodeArrayBuffer(arr){ return await ctx.decodeAudioData(arr.slice(0)); }
+    async function loadFile(file, deck, uiDeck){ const ab = await file.arrayBuffer(); const buf = await decodeArrayBuffer(ab); deck.buffer = buf; uiDeck.title.textContent = file.name; uiDeck.artist.textContent = (file.type||'audio').split('/').pop(); const url = URL.createObjectURL(file); uiDeck.album.innerHTML = '<img src="'+url+'" onerror="this.style.display=\'none\'">'; deck._reversed = reverseBuffer(buf); }
+    function reverseBuffer(buffer){ const numChannels = buffer.numberOfChannels; const rev = ctx.createBuffer(numChannels, buffer.length, buffer.sampleRate); for(let ch=0;ch<numChannels;ch++){ const data = buffer.getChannelData(ch); const out = rev.getChannelData(ch); for(let i=0;i<data.length;i++) out[i] = data[data.length-1-i]; } return rev; }
+
+    ui.fileA.addEventListener('change', async (e)=>{ const f=e.target.files[0]; if (f) await loadFile(f,A,{title:ui.titleA,artist:ui.artistA,album:ui.albumA}); });
+    ui.fileB.addEventListener('change', async (e)=>{ const f=e.target.files[0]; if (f) await loadFile(f,B,{title:ui.titleB,artist:ui.artistB,album:ui.albumB}); });
+
+    // playback & transport
+    function createSourceForDeck(deck){ if (!deck.buffer) return null; const src = ctx.createBufferSource(); src.buffer = deck.buffer; src.playbackRate.value = deck.pitch; src.connect(deck.filter); deck.filter.connect(deck.tremolo); deck.tremolo.connect(deck.outNode); deck.filter.connect(deck.delay); deck.delay.connect(deck.delayGain); deck.delayGain.connect(deck.outNode); deck.filter.connect(deck.reverb); deck.reverb.connect(deck.reverbGain); deck.reverbGain.connect(deck.outNode); deck.filter.connect(deck.flangerDelay); deck.flangerDelay.connect(deck.outNode); let p = deck.filter; for(let i=0;i<deck.phaserFilters.length;i++){ p.connect(deck.phaserFilters[i]); p = deck.phaserFilters[i]; } p.connect(deck.outNode); deck.outNode.connect(deck.analyser); return src; }
+
+    function playDeck(deck, uiPlayBtn, plateEl){ if (!deck.buffer){ uiPlayBtn.textContent='Load file'; return; } if (deck.source){ try{ deck.source.stop(); }catch(e){} deck.source.disconnect(); deck.source=null; deck.playing=false; uiPlayBtn.textContent='▶️'; plateEl.classList.remove('spin'); deck.pausedAt = (ctx.currentTime - deck.startAt) * deck.pitch || 0; return; } deck.pitch = parseFloat((deck === A) ? ui.pitchA.value : ui.pitchB.value); const src = createSourceForDeck(deck); if (!src) return; deck.source = src; const offset = deck.pausedAt || 0; deck.startAt = ctx.currentTime - offset / deck.pitch; src.playbackRate.value = deck.pitch; src.start(0, offset); deck.playing = true; uiPlayBtn.textContent='⏸'; plateEl.classList.add('spin'); src.onended = ()=>{ deck.source = null; deck.playing=false; uiPlayBtn.textContent='▶️'; plateEl.classList.remove('spin'); deck.pausedAt=0; } }
+
+    ui.playA.addEventListener('click', ()=>{ ctx.resume(); playDeck(A, ui.playA, document.getElementById('plateA')); }); ui.playB.addEventListener('click', ()=>{ ctx.resume(); playDeck(B, ui.playB, document.getElementById('plateB')); });
+    ui.pitchA.addEventListener('input', ()=>{ A.pitch = parseFloat(ui.pitchA.value); if (A.source) A.source.playbackRate.value = A.pitch; }); ui.pitchB.addEventListener('input', ()=>{ B.pitch = parseFloat(ui.pitchB.value); if (B.source) B.source.playbackRate.value = B.pitch; });
+
+    // tremolo
+    function setupTremolo(deck){ if (deck._tremoloLFO) return; const lfo = ctx.createOscillator(); const lfoGain = ctx.createGain(); lfo.type='sine'; lfo.frequency.value = 8; lfoGain.gain.value = 0.5; lfo.connect(lfoGain); lfoGain.connect(deck.tremolo.gain); lfo.start(); deck._tremoloLFO = lfo; deck._tremoloGainNode = lfoGain; }
+    setupTremolo(A); setupTremolo(B); ui.gateA.addEventListener('input', ()=>{ const v=parseFloat(ui.gateA.value); A._tremoloGainNode.gain.value = v*0.9; });
+
+    ui.echoA.addEventListener('input', ()=>{ const ms = parseFloat(ui.echoA.value); A.delay.delayTime.value = ms/1000; A.delayGain.gain.value = ms?0.4:0; }); ui.filterA.addEventListener('input', ()=>{ A.filter.frequency.value = parseFloat(ui.filterA.value); });
+
+    function makeImpulse(seconds, decay){ const rate = ctx.sampleRate; const len = seconds * rate; const impulse = ctx.createBuffer(2, len, rate); for(let ch=0; ch<2; ch++){ const imp = impulse.getChannelData(ch); for(let i=0;i<len;i++) imp[i] = (Math.random()*2-1) * Math.pow(1 - i/len, decay); } return impulse; }
+    A.reverb.buffer = makeImpulse(2.5, 2.0); B.reverb.buffer = makeImpulse(2.0, 2.0); ui.reverbA.addEventListener('input', ()=>{ A.reverbGain.gain.value = parseFloat(ui.reverbA.value); }); ui.reverbB.addEventListener('input', ()=>{ B.reverbGain.gain.value = parseFloat(ui.reverbB.value); });
+
+    const flLFO = ctx.createOscillator(); const flGain = ctx.createGain(); flLFO.type='sine'; flLFO.frequency.value = 0.25; flGain.gain.value = 0.003; flLFO.connect(flGain); flGain.connect(B.flangerDelay.delayTime); flLFO.start(); ui.flangerB.addEventListener('input', ()=>{ const v=parseFloat(ui.flangerB.value); B.flangerDelay.delayTime.value = 0.002 + v*0.010; flLFO.frequency.value = 0.1 + v*2; });
+    ui.phaserB.addEventListener('input', ()=>{ const v=parseFloat(ui.phaserB.value); for(let i=0;i<B.phaserFilters.length;i++){ B.phaserFilters[i].frequency.value = 300 + v*3000*(i+1); } });
+
+    ui.masterVol.addEventListener('input', ()=>{ masterGain.gain.value = parseFloat(ui.masterVol.value); }); masterGain.gain.value = parseFloat(ui.masterVol.value);
+    ui.crossfader.addEventListener('input', ()=>{ const v = parseFloat(ui.crossfader.value); A.outNode.gain.value = 1 - v; B.outNode.gain.value = v; }); A.outNode.gain.value = 0.5; B.outNode.gain.value = 0.5; ui.globalFilter.addEventListener('input', ()=>{ masterFilter.frequency.value = parseFloat(ui.globalFilter.value); });
+
+    // beat grid
+    let beatInterval = null; let bpm = parseFloat(ui.bpm.value); ui.bpm.addEventListener('change', ()=>{ bpm = parseFloat(ui.bpm.value); if (beatInterval) startBeat(); }); function startBeat(){ if (beatInterval) clearInterval(beatInterval); const ms = 60000 / bpm; beatInterval = setInterval(()=>{ flashTimeline(); }, ms); } function flashTimeline(){ const p = document.getElementById('masterProgress'); p.style.boxShadow='0 0 12px rgba(255,255,255,0.1)'; setTimeout(()=>p.style.boxShadow='none',80); } ui.beatSyncBtn.addEventListener('click', ()=>{ if (beatInterval) { clearInterval(beatInterval); beatInterval=null; ui.beatSyncBtn.textContent='BPM Sync'; } else { startBeat(); ui.beatSyncBtn.textContent='Sync On'; } });
+
+    // TEKA
+    function triggerTEKA(){ const len = parseInt(ui.tekaCV.value); const div = parseInt(ui.tekaDIV.value)||4; if (!len) return; const deck = (B.outNode.gain.value > A.outNode.gain.value) ? B : A; if (!deck.buffer) return; const slice = (len/div)/1000; const repeats = div; const pos = deck.pausedAt || ((deck.playing)? (ctx.currentTime - deck.startAt) * deck.pitch : 0); let t = ctx.currentTime; for(let i=0;i<repeats;i++){ const s = ctx.createBufferSource(); s.buffer = deck.buffer; s.playbackRate.value = deck.pitch; s.connect(deck.filter); const offset = Math.max(0,pos + i*slice); s.start(t + i*slice, offset, slice); s.stop(t + (i+1)*slice + 0.01); } } ui.triggerTeka.addEventListener('click', triggerTEKA);
+
+    ui.flipDB.addEventListener('click', ()=>{ const deck = (B.outNode.gain.value > A.outNode.gain.value) ? B : A; if (!deck.buffer) return; const src = ctx.createBufferSource(); src.buffer = deck._reversed || reverseBuffer(deck.buffer); src.connect(deck.filter); src.playbackRate.value = 1; src.start(); });
+
+    function triggerRoll(deck, ms){ if (!deck.buffer) return; const len = ms/1000; const pos = deck.pausedAt || ((deck.playing)? (ctx.currentTime - deck.startAt) * deck.pitch : 0); const src = ctx.createBufferSource(); src.buffer = deck.buffer; src.playbackRate.value = deck.pitch; src.loop = true; src.connect(deck.filter); src.start(); setTimeout(()=>{ try{ src.stop(); }catch(e){} }, ms); }
+    ui.rollA.addEventListener('click', ()=>{ triggerRoll(A, 400); }); ui.rollBbtn.addEventListener('click', ()=>{ triggerRoll(B, Math.max(80, parseInt(ui.rollB.value))); });
+
+    ui.bliss.addEventListener('click', ()=>{ A.reverbGain.gain.value = Math.min(1, A.reverbGain.gain.value + 0.3); B.reverbGain.gain.value = Math.min(1, B.reverbGain.gain.value + 0.3); if (A.source) A.source.playbackRate.value *= 1.002; if (B.source) B.source.playbackRate.value *= 0.998; setTimeout(()=>{ if (A.source) A.source.playbackRate.value = A.pitch; if (B.source) B.source.playbackRate.value = B.pitch; }, 6000); });
+
+    ui.masterPlay.addEventListener('click', ()=>{ if (ctx.state==='running'){ ctx.suspend(); ui.masterPlay.textContent='▶ Master'; document.getElementById('plateA').classList.remove('spin'); document.getElementById('plateB').classList.remove('spin'); } else { ctx.resume(); ui.masterPlay.textContent='⏸ Master'; if (A.source) document.getElementById('plateA').classList.add('spin'); if (B.source) document.getElementById('plateB').classList.add('spin'); } });
+
+    // meter animation
+    const analyser = masterAnalyser; const data = new Uint8Array(analyser.frequencyBinCount); function meterLoop(){ analyser.getByteFrequencyData(data); let sum=0; for(let i=0;i<data.length;i++) sum+=data[i]; const avg = sum/data.length/255; const bars = document.querySelectorAll('#meter .bar'); bars.forEach((b,i)=>{ const h = Math.max(6, (avg*200*(i+1)/bars.length)); b.style.height = h + 'px'; }); requestAnimationFrame(meterLoop); } meterLoop();
+
+    // progress & time
+    function formatTime(s){ if (!isFinite(s) || s<0) return '00:00'; const m=Math.floor(s/60); const sec=Math.floor(s%60); return (m<10?'0'+m:m)+':'+(sec<10?'0'+sec:sec)}
+    function updateTime(){ let dur=0, pos=0; if (A.buffer) dur = Math.max(dur, A.buffer.duration); if (B.buffer) dur = Math.max(dur, B.buffer.duration); if (A.playing) pos = Math.max(pos, (ctx.currentTime - A.startAt) * A.pitch); if (B.playing) pos = Math.max(pos, (ctx.currentTime - B.startAt) * B.pitch); document.getElementById('globalDuration').textContent = formatTime(dur); document.getElementById('globalTime').textContent = formatTime(pos); if (dur>0) ui.masterProgress.style.width = Math.min(100, (pos/dur*100)) + '%'; requestAnimationFrame(updateTime); } updateTime();
+
+    // drag & drop
+    window.addEventListener('dragover',e=>{ e.preventDefault(); }); window.addEventListener('drop', async (e)=>{ e.preventDefault(); const f = e.dataTransfer.files[0]; if (!f) return; if (!A.buffer) await loadFile(f,A,{title:ui.titleA,artist:ui.artistA,album:ui.albumA}); else await loadFile(f,B,{title:ui.titleB,artist:ui.artistB,album:ui.albumB}); });
+
+    // keyboard shortcuts
+    window.addEventListener('keydown',(e)=>{ if (e.code==='Space'){ e.preventDefault(); ui.masterPlay.click(); } if (e.key==='q') ui.playA.click(); if (e.key==='w') ui.playB.click(); });
+    document.body.addEventListener('click', ()=>{ if (ctx.state!=='running') ctx.resume(); }, {once:true});
+
+    // --- Waveform drawing ---
+    const waveCanvas = ui.waveCanvas; const wCtx = waveCanvas.getContext('2d'); let drawWave = true; let mode = 'master'; ui.toggleWave.addEventListener('click', ()=>{ drawWave = !drawWave; ui.toggleWave.textContent = drawWave ? 'Hide Wave' : 'Show Wave'; }); ui.waveMode.addEventListener('change', ()=>{ mode = ui.waveMode.value; });
+    function resizeCanvasIfNeeded(){ const rect = waveCanvas.getBoundingClientRect(); const dpr = window.devicePixelRatio || 1; const w = Math.max(1, Math.floor(rect.width * dpr)); const h = Math.max(1, Math.floor(rect.height * dpr)); if (waveCanvas.width !== w || waveCanvas.height !== h){ waveCanvas.width = w; waveCanvas.height = h; } }
+    function draw(){ if (!drawWave) { requestAnimationFrame(draw); return; } resizeCanvasIfNeeded(); const dpr = window.devicePixelRatio || 1; const width = waveCanvas.width; const height = waveCanvas.height; wCtx.clearRect(0,0,width,height); const grad = wCtx.createLinearGradient(0,0,width,0); grad.addColorStop(0,'rgba(255,77,109,0.05)'); grad.addColorStop(1,'rgba(0,179,255,0.03)'); wCtx.fillStyle = grad; wCtx.fillRect(0,0,width,height);
+      let analyserForDraw = masterAnalyser; if (mode==='deckA') analyserForDraw = A.analyser; else if (mode==='deckB') analyserForDraw = B.analyser; const bufferLength = analyserForDraw.fftSize; const dataArr = new Uint8Array(bufferLength); analyserForDraw.getByteTimeDomainData(dataArr);
+      wCtx.lineWidth = 2 * dpr; wCtx.strokeStyle = 'rgba(255,255,255,0.95)'; wCtx.beginPath(); const sliceWidth = width / bufferLength; let x = 0; for(let i=0;i<bufferLength;i++){ const v = dataArr[i] / 128.0; const y = v * height/2; if(i===0){ wCtx.moveTo(x,y); } else { wCtx.lineTo(x,y); } x += sliceWidth; } wCtx.stroke(); wCtx.lineWidth = 1 * dpr; wCtx.strokeStyle = 'rgba(255,77,109,0.35)'; wCtx.beginPath(); x=0; for(let i=0;i<bufferLength;i++){ const v = dataArr[i] / 128.0; const y = v * height/2; if(i===0) wCtx.moveTo(x,y); else wCtx.lineTo(x,y); x += sliceWidth; } wCtx.stroke(); requestAnimationFrame(draw); }
+    ui.toggleWave.textContent = 'Hide Wave'; function initAnalysers(){ masterAnalyser.fftSize = 2048; A.analyser.fftSize = 2048; B.analyser.fftSize = 2048; } initAnalysers(); draw();
+
+    // --- Recording (MediaRecorder) ---
+    let mediaRecorder = null; let recordedChunks = []; let recordedBlobUrl = null; let recordingStartTime = null; let recTimer = null;
+
+    function updateRecUI(state){ if (state === 'recording'){ ui.recDot.style.background = '#ff4d4d'; ui.recLabel.textContent = 'Recording...'; ui.startRec.disabled = true; ui.stopRec.disabled = false; ui.downloadRec.disabled = true; } else if (state === 'stopped'){ ui.recDot.style.background = '#a3a3a3'; ui.recLabel.textContent = 'Not recording'; ui.startRec.disabled = false; ui.stopRec.disabled = true; ui.downloadRec.disabled = recordedChunks.length === 0; } }
+
+    ui.startRec.addEventListener('click', ()=>{
+      try{
+        recordedChunks = [];
+        // create MediaRecorder of the master mix stream
+        mediaRecorder = new MediaRecorder(mediaDest.stream, {mimeType: 'audio/webm'});
+        mediaRecorder.ondataavailable = (e)=>{ if (e.data && e.data.size>0) recordedChunks.push(e.data); };
+        mediaRecorder.onstop = ()=>{
+          const blob = new Blob(recordedChunks, {type: recordedChunks[0]?.type || 'audio/webm'});
+          if (recordedBlobUrl) URL.revokeObjectURL(recordedBlobUrl);
+          recordedBlobUrl = URL.createObjectURL(blob);
+          ui.downloadRec.disabled = false;
+          updateRecUI('stopped');
+          // create automatic download link? we leave to user
+        };
+        mediaRecorder.start();
+        recordingStartTime = Date.now();
+        // timer
+        recTimer = setInterval(()=>{ const s = Math.floor((Date.now()-recordingStartTime)/1000); ui.recLabel.textContent = 'Recording — ' + Math.floor(s/60).toString().padStart(2,'0')+ ':' + (s%60).toString().padStart(2,'0'); }, 500);
+        updateRecUI('recording');
+      }catch(err){ alert('Recording failed: '+err.message); }
+    });
+
+    ui.stopRec.addEventListener('click', ()=>{
+      if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+      if (recTimer) clearInterval(recTimer); recTimer = null;
+    });
+
+    ui.downloadRec.addEventListener('click', ()=>{
+      if (!recordedChunks.length && !recordedBlobUrl){ alert('No recording available.'); return; }
+      // prefer to download the blob created onstop, if present
+      if (recordedBlobUrl){ const a = document.createElement('a'); a.href = recordedBlobUrl; a.download = 'hiru-beats-mix.webm'; document.body.appendChild(a); a.click(); a.remove(); }
+      else { const blob = new Blob(recordedChunks, {type: recordedChunks[0]?.type || 'audio/webm'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'hiru-beats-mix.webm'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); }
+    });
+
+    // optional: export recorded buffer as WAV (basic conversion). We can create a WAV file from the recorded Blob if browser provides uncompressed PCM — but MediaRecorder typically gives compressed webm/ogg. Converting compressed to WAV in-browser requires decoding then re-encoding; that is complex. For now, we provide direct download of the recorded webm audio.
+
+  </script>
+</body>
+</html>
